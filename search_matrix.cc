@@ -69,8 +69,10 @@ void searchUnordered(vector<int> tosearch,vector< vector <int> > matrix){
     for(int i=0;i<matrix.size();i++){
         int count=0;
         for(int j=0;j<tosearch.size();j++){
-            if(find(matrix[i].begin(), matrix[i].end(), tosearch[j]) != (matrix[i].end())){
+            vector<int>:: iterator pos = find(matrix[i].begin(), matrix[i].end(), tosearch[j]);
+            if( pos != (matrix[i].end())){
                 ++count;
+                matrix[i].erase(pos);
             }
            
         
@@ -89,6 +91,7 @@ void searchUnordered(vector<int> tosearch,vector< vector <int> > matrix){
 void searchMaxMatch(vector<int> tosearch,vector< vector <int> > matrix){
 
 	cout<<"Need to search maximum matching row for: ";
+    
 	for(int i=0;i<tosearch.size();i++)
 			cout<<tosearch[i]<<" ";
     
@@ -100,8 +103,11 @@ void searchMaxMatch(vector<int> tosearch,vector< vector <int> > matrix){
     for(int i=0;i<matrix.size();i++){
         int count=0;
         for(int j=0;j<tosearch.size();j++){
-            if(find(matrix[i].begin(), matrix[i].end(), tosearch[j]) != (matrix[i].end())){
+            vector<int>:: iterator pos = find(matrix[i].begin(), matrix[i].end(), tosearch[j]);
+            
+            if(pos != (matrix[i].end())){
                 ++count;
+                matrix[i].erase(pos);
             }
             
             
