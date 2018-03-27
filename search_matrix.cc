@@ -48,7 +48,7 @@ void searchSequence(vector<int> tosearch,vector< vector <int> > matrix){
     for(int i=0;i<matrix.size();i++){
        
         if(search(matrix[i].begin(), matrix[i].end(), tosearch.begin(), tosearch.end()) != (matrix[i].end())){
-                    cout<<"Sequence found in row: "<<i<<endl; //Assuming row ordering starts from 0
+                    cout<<"Sequence found in row: "<<i+1<<endl; //Assuming row ordering starts from 0
                     found = true;
             }
     }
@@ -78,7 +78,7 @@ void searchUnordered(vector<int> tosearch,vector< vector <int> > matrix){
         
         }
         if(count == tosearch.size()){
-            cout<<"Sequence found in row: "<<i<<endl; //Assuming row ordering starts from 0
+            cout<<"Sequence found in row: "<<i+1<<endl; //Assuming row ordering starts from 0
             found = true;
         }
     }
@@ -99,7 +99,8 @@ void searchMaxMatch(vector<int> tosearch,vector< vector <int> > matrix){
     
     cout<<"Matrix to be searched: "<<endl;
     printMatrix(matrix);
-    int max = 0,maxrow = -1;
+    int max = 0;
+    vector<int> rownumbers;
     for(int i=0;i<matrix.size();i++){
         int count=0;
         for(int j=0;j<tosearch.size();j++){
@@ -114,16 +115,23 @@ void searchMaxMatch(vector<int> tosearch,vector< vector <int> > matrix){
         }
         if(count > max){
             max = count;
-            maxrow = i;
+            rownumbers.clear();
+            rownumbers.push_back(i+1);
+        }
+        else if(count == max){
+            rownumbers.push_back(i+1);
         }
     }
     
-    if(maxrow > -1)
-        cout<<"Maximum matches found in row: "<<maxrow<<endl;
-    else
+    if(rownumbers.size()==0)
         cout<<"Match not found in matrix"<<endl;
-
-
+    else
+    {
+        cout<<"Maximum matches found in rows: ";
+        for(int i = 0;i<rownumbers.size();i++)
+            cout<<rownumbers[i]<<" ";
+        cout<<endl;
+    }
 }
 void printRunCommand(){
     cout<<endl<<"Please specify input file name"<<endl;
