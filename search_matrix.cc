@@ -28,7 +28,7 @@ void printMatrix(vector< vector<int> > matrix){
     }
 }
 void listAvailableCommands(){
-    cout<<endl;
+
     cout<<endl<<"Available Commands are: "<<endl;
     cout<<endl;
     cout<<"1. searchSequence "<<endl<<"2. searchUnordered "<<endl<<"3. searchMaxMatch "<<endl<<"4. exit "<<endl;
@@ -156,7 +156,7 @@ vector< vector<int> > openAndParseData(char **argv,vector< vector<int> > &matrix
                 int x=0;
                 stringstream ss(s);
                 ss >> x;
-                    row.push_back(x); //getting values of the row
+                row.push_back(x); //getting values of the row
             }
             matrix.push_back(row); // storing in matrix row by row
         }
@@ -187,9 +187,9 @@ void parseCommandInput(string &cmd,vector<int> &tosearch,string line, bool &alln
                 stringstream tmp(s);
                 int x = 0;
                 tmp >> x;
-                if(x==0 && s != "0")
+                if(to_string(x) != s)
                 {
-                    cout<<endl<<"Invalid input"<<endl;
+                    cerr<<endl<<"ERROR: Invalid input"<<endl;
                     allnumbers = false;
                     return;
                 }
@@ -242,12 +242,12 @@ int main(int argc, char **argv){
 	
         // validateInput(cmd,tosearch); -- To Do. validate if integer.
         if(!allnumbers){
-            cout<<"Please enter only integers"<<endl;
+            cerr<<"ERROR : Please enter only integers"<<endl;
         }
         else if(tosearch.size()==0 && cmd !="exit")
         {
-            cout<<"Please input integers to search"<<endl;
-            listAvailableCommands();
+            cerr<<endl<<"ERROR: Please input integers to search"<<endl;
+            //listAvailableCommands();
         }
         else{
             if(cmd =="exit"){
@@ -260,7 +260,7 @@ int main(int argc, char **argv){
             else if(cmd == "searchUnordered")
                 searchUnordered(tosearch,matrix); //call appropriate function
 			else{
-                cout<<endl<<"ERROR: Command Not Found"<<endl; //invalid commands
+                cerr<<endl<<"ERROR: Command Not Found"<<endl; //invalid commands
                 listAvailableCommands(); //show available commands
 			}
         }
