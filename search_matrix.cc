@@ -3,8 +3,12 @@
 #include<vector>
 #include<sstream>
 #include<algorithm>
+#include<boost/algorithm/searching/boyer_moore.hpp>
+#include<string>
 
 using namespace std;
+
+typedef void (*fn_ptr)(vector <int>, vector< vector <int> >);
 
 
 string decrypt(string raw_text)
@@ -26,6 +30,7 @@ void printMatrix(vector< vector<int> > matrix){
         }
         cout<<endl;
     }
+    cout<<endl;
 }
 void listAvailableCommands(){
 
@@ -47,8 +52,8 @@ void searchSequence(vector<int> tosearch,vector< vector <int> > matrix){
     bool found = false;
     for(int i=0;i<matrix.size();i++){
        
-        if(search(matrix[i].begin(), matrix[i].end(), tosearch.begin(), tosearch.end()) != (matrix[i].end())){
-                    cout<<"Sequence found in row: "<<i+1<<endl; //Assuming row ordering starts from 0
+        if(boost::algorithm::boyer_moore_search(matrix[i].begin(), matrix[i].end(),tosearch.begin(), tosearch.end()).first != matrix[i].end()){
+                    cout<<"Sequence found in row: "<<i+1<<endl; //Assuming row ordering starts from 1
                     found = true;
             }
     }
@@ -78,7 +83,7 @@ void searchUnordered(vector<int> tosearch,vector< vector <int> > matrix){
         
         }
         if(count == tosearch.size()){
-            cout<<"Sequence found in row: "<<i+1<<endl; //Assuming row ordering starts from 0
+            cout<<"Sequence found in row: "<<i+1<<endl; //Assuming row ordering starts from 1
             found = true;
         }
     }
@@ -149,16 +154,16 @@ vector< vector<int> > openAndParseData(char **argv,vector< vector<int> > &matrix
         
         while(getline(input_file,rawdata)){
             
-            parsed = decrypt(rawdata); //decrypting the data row by row
+            parsed = decrypt(rawdata); //decrypting the data
             vector<int> row;
             istringstream iss(parsed);
             for(string s; iss >> s;){
                 int x=0;
                 stringstream ss(s);
                 ss >> x;
-                row.push_back(x); //getting values of the row
+                row.push_back(x); //getting values
             }
-            matrix.push_back(row); // storing in matrix row by row
+            matrix.push_back(row); // storing in matrix 
         }
     }
     
@@ -169,8 +174,6 @@ vector< vector<int> > openAndParseData(char **argv,vector< vector<int> > &matrix
 
 void parseCommandInput(string &cmd,vector<int> &tosearch,string line, bool &allnumbers){
     
-    
-        
         int found=0,pos=0;
         bool first = false;
         while((found = line.find_first_of(' ',pos))!= string::npos){
@@ -179,11 +182,9 @@ void parseCommandInput(string &cmd,vector<int> &tosearch,string line, bool &alln
             if(!first){
                 cmd = s;
                 first = true;
-                
             }
             else
             {
-                
                 stringstream tmp(s);
                 int x = 0;
                 tmp >> x;
@@ -209,61 +210,53 @@ void parseCommandInput(string &cmd,vector<int> &tosearch,string line, bool &alln
         }
     
 }
-
+void add_function_mappings(map<string,fn_ptr> &fnMap){
+    fnMap["searchSequence"] = searchSequence;
+    fnMap["searchUnordered"] = searchUnordered;
+    fnMap["searchMaxMatch"] = searchMaxMatch;
+    
+}
 
 int main(int argc, char **argv){
 
-	vector< vector<int> > matrix;
-    bool allnumbers;
+	vector< vector<int> > matrix; //matrix representation of text file
+    bool allnumbers; // validates if entered input has numbers only
     bool exitcmd = false; //has exit command been entered
-    string cmd;
+    map<string, fn_ptr> fnMap; // map holding function pointers
     
 	if(argc < 2)
 	{	
-        printRunCommand();
+        printRunCommand(); //Input file not entered
 		return -1;
 	}
     
-	listAvailableCommands();
-	
-    openAndParseData(argv,matrix);
-	
+	listAvailableCommands(); //list all available options
     
+    openAndParseData(argv,matrix); // decrypt the text file and store in matrix
+	
+    add_function_mappings(fnMap); //map strings to their functions
     
     while(!exitcmd){
         
         string cmd,line;
-        vector<int> tosearch;
+        vector<int> tosearch; // sequence or numbers to be searched
         
         cout<<endl<<"Enter command: "<<endl;
         getline(cin,line);
         allnumbers = true;
-        parseCommandInput(cmd,tosearch,line,allnumbers);
-	
-        // validateInput(cmd,tosearch); -- To Do. validate if integer.
-        if(!allnumbers){
+        parseCommandInput(cmd,tosearch,line,allnumbers); //parse line to seperate command from numbers.
+                                                        //also check if all are integers
+        if(!allnumbers)
             cerr<<"ERROR : Please enter only integers"<<endl;
-        }
         else if(tosearch.size()==0 && cmd !="exit")
-        {
             cerr<<endl<<"ERROR: Please input integers to search"<<endl;
-            //listAvailableCommands();
-        }
-        else{
-            if(cmd =="exit"){
-                exitcmd = true;
-            }
-            else if(cmd == "searchSequence")
-                searchSequence(tosearch,matrix); //call appropriate function
-			else if(cmd =="searchMaxMatch")
-				searchMaxMatch(tosearch,matrix); //call appropriate function
-            else if(cmd == "searchUnordered")
-                searchUnordered(tosearch,matrix); //call appropriate function
-			else{
-                cerr<<endl<<"ERROR: Command Not Found"<<endl; //invalid commands
-                listAvailableCommands(); //show available commands
-			}
-        }
+        else if(cmd =="exit")
+            exitcmd = true; //exit program
+        else if(fnMap[cmd]== NULL)
+            cerr<<endl<<"ERROR: Command Not Found"<<endl; //invalid command
+        else
+            fnMap[cmd](tosearch,matrix); //call the function
+        
 		
 	}
 }
