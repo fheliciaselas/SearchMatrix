@@ -5,6 +5,8 @@
 #include<algorithm>
 #include<boost/algorithm/searching/boyer_moore.hpp>
 #include<string>
+#include<time.h>
+
 
 using namespace std;
 
@@ -50,6 +52,8 @@ void searchSequence(vector<int> tosearch,vector< vector <int> > matrix){
     cout<<"Matrix to be searched: "<<endl;
     printMatrix(matrix);
     bool found = false;
+    clock_t start = clock() ;
+    
     for(int i=0;i<matrix.size();i++){
        
         if(boost::algorithm::boyer_moore_search(matrix[i].begin(), matrix[i].end(),tosearch.begin(), tosearch.end()).first != matrix[i].end()){
@@ -57,8 +61,14 @@ void searchSequence(vector<int> tosearch,vector< vector <int> > matrix){
                     found = true;
             }
     }
+    
+    clock_t end  = clock() ;
+    
     if(!found)
         cout<<"Sequence not found in matrix"<<endl;
+    
+    float time = (float) (end - start) / CLOCKS_PER_SEC ;
+    cout<<"Searching Time: "<<time<<" seconds"<<endl;
 
 }
 
@@ -71,6 +81,9 @@ void searchUnordered(vector<int> tosearch,vector< vector <int> > matrix){
     bool found = false;
     cout<<"Matrix to be searched: "<<endl;
     printMatrix(matrix);
+    
+    clock_t start = clock() ;
+    
     for(int i=0;i<matrix.size();i++){
         int count=0;
         for(int j=0;j<tosearch.size();j++){
@@ -87,10 +100,15 @@ void searchUnordered(vector<int> tosearch,vector< vector <int> > matrix){
             found = true;
         }
     }
+    clock_t end  = clock() ;
+
     
     if(!found)
         cout<<"Numbers not found in matrix"<<endl;
 	
+    float time = (float) (end - start) / CLOCKS_PER_SEC ;
+    cout<<"Searching Time: "<<time<<" seconds"<<endl;
+
 }
 
 void searchMaxMatch(vector<int> tosearch,vector< vector <int> > matrix){
@@ -106,6 +124,9 @@ void searchMaxMatch(vector<int> tosearch,vector< vector <int> > matrix){
     printMatrix(matrix);
     int max = 0;
     vector<int> rownumbers;
+    
+    clock_t start = clock() ;
+
     for(int i=0;i<matrix.size();i++){
         int count=0;
         for(int j=0;j<tosearch.size();j++){
@@ -127,7 +148,8 @@ void searchMaxMatch(vector<int> tosearch,vector< vector <int> > matrix){
             rownumbers.push_back(i+1);
         }
     }
-    
+    clock_t end  = clock() ;
+
     if(rownumbers.size()==0)
         cout<<"Match not found in matrix"<<endl;
     else
@@ -137,6 +159,10 @@ void searchMaxMatch(vector<int> tosearch,vector< vector <int> > matrix){
             cout<<rownumbers[i]<<" ";
         cout<<endl;
     }
+
+    float time = (float) (end - start) / CLOCKS_PER_SEC ;
+    cout<<"Searching Time: "<<time<<" seconds"<<endl;
+
 }
 void printRunCommand(){
     cout<<endl<<"Please specify input file name"<<endl;
@@ -163,7 +189,7 @@ vector< vector<int> > openAndParseData(char **argv,vector< vector<int> > &matrix
                 ss >> x;
                 row.push_back(x); //getting values
             }
-            matrix.push_back(row); // storing in matrix 
+            matrix.push_back(row); // storing in matrix
         }
     }
     
