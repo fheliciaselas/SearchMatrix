@@ -121,19 +121,39 @@ void searchSequence(vector<int> tosearch, map< int, map<int,int > > m1){
     
    // bool found = false;
     int rows = matrix.size();
+    int len = tosearch.size();
     vector<int> rowsfound;
-
     clock_t start = clock() ;
-
+    int s = m1.size(); //rows
     
-    for(int i=0;i<rows;i++){
+    for(int i=0;i<s;i++){ //for each row
+        bool found = true;
+        
+        for(int j=0;j<len;j++){
+            int key = tosearch[j];
+            if(m1[i].count(key) == 0 || m1[i][key] == 0){
+                found = false;
+                break;
+            }
+            else
+                m1[i][key] -= 1;
+        }
+        if(found)
+        {
+            if(boost::algorithm::knuth_morris_pratt_search(matrix[i].begin(), matrix[i].end(),tosearch.begin(), tosearch.end()).first != matrix[i].end()){
+                rowsfound.push_back(i+1);
+            }
+            
+        }
+    }
+    /*for(int i=0;i<rows;i++){
         
         if(boost::algorithm::knuth_morris_pratt_search(matrix[i].begin(), matrix[i].end(),tosearch.begin(), tosearch.end()).first != matrix[i].end()){
             rowsfound.push_back(i+1); //Assuming row ordering starts from 1
             
         }
         
-    }
+    }*/
     
     clock_t end  = clock() ;
     
@@ -162,7 +182,7 @@ void searchUnordered(vector<int> tosearch, map< int, map<int,int > > m1){
     for(int i=0;i<s;i++){ //for each row
         bool found = true;
         
-        for(int j=0;j<len;j++){
+        for(int j=0;j<len;j++){ //for len of substring
             int key = tosearch[j];
             if(m1[i].count(key) == 0 || m1[i][key] == 0){
                 found = false;
@@ -194,16 +214,17 @@ void searchMaxMatch(vector<int> tosearch, map< int, map<int,int > > m1){
     int len = tosearch.size();
     vector<int> rowsfound;
     cout<<"Searching Max Match rows "<<endl;
-    
-    clock_t start = clock() ;
-    
     int s = m1.size(); //rows
     int maxrow = -1, max = 0;
+    
+    clock_t start = clock() ;
     for(int i=0;i<s;i++){ //for each row
         int count = 0;
-        for(int j=0;j<len;j++){
-            if(m1[i][tosearch[j]] > 0)
+        for(int j=0;j<len;j++){ //for the length of the substring
+            if(m1[i][tosearch[j]] > 0){
                 ++count;
+                m1[i][tosearch[j]] -= 1;
+            }
         }
         if(count > max){
             max = count;
