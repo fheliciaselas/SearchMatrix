@@ -3,15 +3,16 @@
 #include<vector>
 #include<sstream>
 #include<algorithm>
-#include<boost/algorithm/searching/boyer_moore.hpp>
+#include<boost/algorithm/searching/knuth_morris_pratt.hpp>
 #include<string>
 #include<time.h>
+#include<map>
 
 
 using namespace std;
 
-typedef void (*fn_ptr)(vector <int>, vector< vector <int> >);
-
+typedef void (*fn_ptr)(vector <int>,map< int, map<int,int > > );
+vector< vector<int > > matrix; // 2D matrix representation of text file
 
 string decrypt(string raw_text)
 {
@@ -24,16 +25,7 @@ string decrypt(string raw_text)
 
 	return output;
 }
-void printMatrix(vector< vector<int> > matrix){
-    
-    for(int i=0;i<matrix.size();i++){
-        for(int j=0;j<matrix[i].size();j++){
-            cout<<matrix[i][j]<<" ";
-        }
-        cout<<endl;
-    }
-    cout<<endl;
-}
+
 void listAvailableCommands(){
 
     cout<<endl<<"Available Commands are: "<<endl;
@@ -43,159 +35,47 @@ void listAvailableCommands(){
     cout<<"usage example: searchSequence 1 2 3"<<endl;
 }
 
-void searchSequence(vector<int> tosearch,vector< vector <int> > matrix){
-
-	cout<<"Need to search sequence: ";
-	for(int i=0;i<tosearch.size();i++)
-			cout<<tosearch[i]<<" ";
-	cout<<endl;
-    cout<<"Matrix to be searched: "<<endl;
-    printMatrix(matrix);
-    bool found = false;
-    clock_t start = clock() ;
-    
-    for(int i=0;i<matrix.size();i++){
-       
-        if(boost::algorithm::boyer_moore_search(matrix[i].begin(), matrix[i].end(),tosearch.begin(), tosearch.end()).first != matrix[i].end()){
-                    cout<<"Sequence found in row: "<<i+1<<endl; //Assuming row ordering starts from 1
-                    found = true;
-            }
-    }
-    
-    clock_t end  = clock() ;
-    
-    if(!found)
-        cout<<"Sequence not found in matrix"<<endl;
-    
-    float time = (float) (end - start) / CLOCKS_PER_SEC ;
-    cout<<"Searching Time: "<<time<<" seconds"<<endl;
-
-}
-
-void searchUnordered(vector<int> tosearch,vector< vector <int> > matrix){
-
-	cout<<"Need to search unordered: ";
-	for(int i=0;i<tosearch.size();i++)
-			cout<<tosearch[i]<<" ";
-	cout<<endl;
-    bool found = false;
-    cout<<"Matrix to be searched: "<<endl;
-    printMatrix(matrix);
-    
-    clock_t start = clock() ;
-    
-    for(int i=0;i<matrix.size();i++){
-        int count=0;
-        for(int j=0;j<tosearch.size();j++){
-            vector<int>:: iterator pos = find(matrix[i].begin(), matrix[i].end(), tosearch[j]);
-            if( pos != (matrix[i].end())){
-                ++count;
-                matrix[i].erase(pos);
-            }
-           
-        
-        }
-        if(count == tosearch.size()){
-            cout<<"Sequence found in row: "<<i+1<<endl; //Assuming row ordering starts from 1
-            found = true;
-        }
-    }
-    clock_t end  = clock() ;
-
-    
-    if(!found)
-        cout<<"Numbers not found in matrix"<<endl;
-	
-    float time = (float) (end - start) / CLOCKS_PER_SEC ;
-    cout<<"Searching Time: "<<time<<" seconds"<<endl;
-
-}
-
-void searchMaxMatch(vector<int> tosearch,vector< vector <int> > matrix){
-
-	cout<<"Need to search maximum matching row for: ";
-    
-	for(int i=0;i<tosearch.size();i++)
-			cout<<tosearch[i]<<" ";
-    
-	cout<<endl;
-    
-    cout<<"Matrix to be searched: "<<endl;
-    printMatrix(matrix);
-    int max = 0;
-    vector<int> rownumbers;
-    
-    clock_t start = clock() ;
-
-    for(int i=0;i<matrix.size();i++){
-        int count=0;
-        for(int j=0;j<tosearch.size();j++){
-            vector<int>:: iterator pos = find(matrix[i].begin(), matrix[i].end(), tosearch[j]);
-            
-            if(pos != (matrix[i].end())){
-                ++count;
-                matrix[i].erase(pos);
-            }
-            
-            
-        }
-        if(count > max){
-            max = count;
-            rownumbers.clear();
-            rownumbers.push_back(i+1);
-        }
-        else if(count == max){
-            rownumbers.push_back(i+1);
-        }
-    }
-    clock_t end  = clock() ;
-
-    if(rownumbers.size()==0)
-        cout<<"Match not found in matrix"<<endl;
-    else
-    {
-        cout<<"Maximum matches found in rows: ";
-        for(int i = 0;i<rownumbers.size();i++)
-            cout<<rownumbers[i]<<" ";
-        cout<<endl;
-    }
-
-    float time = (float) (end - start) / CLOCKS_PER_SEC ;
-    cout<<"Searching Time: "<<time<<" seconds"<<endl;
-
-}
 void printRunCommand(){
     cout<<endl<<"Please specify input file name"<<endl;
     cout<<endl<<"Run as ./search.o test.txt"<<endl;
 }
 
-
-vector< vector<int> > openAndParseData(char **argv,vector< vector<int> > &matrix ){
+void  openAndParseData(char **argv, map< int, map <int,int > >  &m1, vector < vector <int > > &matrix ){
     
     ifstream input_file;
     string rawdata,parsed;
     input_file.open(argv[1]); //opening the input file
-    
+    int row_count=0;
     if(input_file.is_open()){
         
         while(getline(input_file,rawdata)){
             
             parsed = decrypt(rawdata); //decrypting the data
-            vector<int> row;
+            map<int,int> temp;
+            vector <int> order;
             istringstream iss(parsed);
+            int col_count=0;
             for(string s; iss >> s;){
                 int x=0;
                 stringstream ss(s);
                 ss >> x;
-                row.push_back(x); //getting values
+                order.push_back(x);
+    
+                if(temp.count(x)==0){
+                    temp[x] =1;
+                }
+                else{
+                    temp[x] = temp[x]+1;
+                }
+                
             }
-            matrix.push_back(row); // storing in matrix
+            m1[row_count] = temp;
+            matrix.push_back(order);
+            row_count++;
         }
     }
     
     input_file.close();
-    
-    return matrix;
 }
 
 void parseCommandInput(string &cmd,vector<int> &tosearch,string line, bool &allnumbers){
@@ -236,6 +116,121 @@ void parseCommandInput(string &cmd,vector<int> &tosearch,string line, bool &alln
         }
     
 }
+
+void searchSequence(vector<int> tosearch, map< int, map<int,int > > m1){
+    
+   // bool found = false;
+    int rows = matrix.size();
+    vector<int> rowsfound;
+
+    clock_t start = clock() ;
+
+    
+    for(int i=0;i<rows;i++){
+        
+        if(boost::algorithm::knuth_morris_pratt_search(matrix[i].begin(), matrix[i].end(),tosearch.begin(), tosearch.end()).first != matrix[i].end()){
+            rowsfound.push_back(i+1); //Assuming row ordering starts from 1
+            
+        }
+        
+    }
+    
+    clock_t end  = clock() ;
+    
+    if(rowsfound.size()==0)
+        cout<<"Match not found in matrix"<<endl;
+    else
+    {
+        for(int i = 0;i<rowsfound.size();i++)
+            cout<<"Numbers found in row: "<<rowsfound[i]<<endl;
+    }
+    float time = (float) (end - start) / CLOCKS_PER_SEC ;
+    cout<<"Searching Time: "<<time<<" seconds"<<endl;
+    
+}
+                    
+void searchUnordered(vector<int> tosearch, map< int, map<int,int > > m1){
+    
+    int len = tosearch.size();
+    vector<int> rowsfound;
+    cout<<"Searching Unordered "<<endl;
+    
+    clock_t start = clock() ;
+
+    int s = m1.size(); //rows
+    
+    for(int i=0;i<s;i++){ //for each row
+        bool found = true;
+        
+        for(int j=0;j<len;j++){
+            int key = tosearch[j];
+            if(m1[i].count(key) == 0 || m1[i][key] == 0){
+                found = false;
+                break;
+            }
+            else
+                m1[i][key] -= 1;
+        }
+        if(found)
+            rowsfound.push_back(i+1);
+    }
+    
+    clock_t end = clock() ;
+    float time = (float) (end - start) / CLOCKS_PER_SEC ;
+    cout<<"Searching Time: "<<time<<" seconds"<<endl;
+    if(rowsfound.size()==0)
+        cout<<"Match not found in matrix"<<endl;
+    else
+    {
+        for(int i = 0;i<rowsfound.size();i++)
+            cout<<"Numbers found in row: "<<rowsfound[i]<<endl;
+    }
+    
+
+}
+
+void searchMaxMatch(vector<int> tosearch, map< int, map<int,int > > m1){
+    
+    int len = tosearch.size();
+    vector<int> rowsfound;
+    cout<<"Searching Max Match rows "<<endl;
+    
+    clock_t start = clock() ;
+    
+    int s = m1.size(); //rows
+    int maxrow = -1, max = 0;
+    for(int i=0;i<s;i++){ //for each row
+        int count = 0;
+        for(int j=0;j<len;j++){
+            if(m1[i][tosearch[j]] > 0)
+                ++count;
+        }
+        if(count > max){
+            max = count;
+            rowsfound.clear();
+            rowsfound.push_back(i+1);
+        }
+        else if(count > 0 && count == max){
+            rowsfound.push_back(i+1);
+        }
+       
+    }
+    
+    clock_t end = clock() ;
+    float time = (float) (end - start) / CLOCKS_PER_SEC ;
+    cout<<"Searching Time: "<<time<<" seconds"<<endl;
+    if(rowsfound.size()==0)
+        cout<<"Match not found in matrix"<<endl;
+    else
+    {
+        cout<<"Max Matched found in row(s): ";
+        for(int i = 0;i<rowsfound.size();i++)
+            cout<<rowsfound[i]<<" ";
+        cout<<endl;
+    }
+    
+}
+                    
 void add_function_mappings(map<string,fn_ptr> &fnMap){
     fnMap["searchSequence"] = searchSequence;
     fnMap["searchUnordered"] = searchUnordered;
@@ -243,12 +238,25 @@ void add_function_mappings(map<string,fn_ptr> &fnMap){
     
 }
 
+void createSearchCount(map<int, int > &searchCount,vector<int> tosearch){
+    
+    int len = tosearch.size();
+    for(int i=0;i<len;i++){
+        if(searchCount.count(tosearch[i])==0)
+            searchCount[tosearch[i]]=1;
+        else
+            searchCount[tosearch[i]] = searchCount[tosearch[i]]+1;
+    }
+}
+
 int main(int argc, char **argv){
 
-	vector< vector<int> > matrix; //matrix representation of text file
+	
     bool allnumbers; // validates if entered input has numbers only
     bool exitcmd = false; //has exit command been entered
     map<string, fn_ptr> fnMap; // map holding function pointers
+    
+    map <int,map<int,int> > m1;
     
 	if(argc < 2)
 	{	
@@ -258,10 +266,11 @@ int main(int argc, char **argv){
     
 	listAvailableCommands(); //list all available options
     
-    openAndParseData(argv,matrix); // decrypt the text file and store in matrix
-	
-    add_function_mappings(fnMap); //map strings to their functions
-    
+    cout<<"Parsing Input file after decrypting. Wait for completion"<<endl;
+    openAndParseData(argv, m1,matrix); // decrypt the text file and store in map
+    cout<<"End parsing"<<endl;
+
+    add_function_mappings(fnMap); //map user string to function
     while(!exitcmd){
         
         string cmd,line;
@@ -272,6 +281,7 @@ int main(int argc, char **argv){
         allnumbers = true;
         parseCommandInput(cmd,tosearch,line,allnumbers); //parse line to seperate command from numbers.
                                                         //also check if all are integers
+        
         if(!allnumbers)
             cerr<<"ERROR : Please enter only integers"<<endl;
         else if(tosearch.size()==0 && cmd !="exit")
@@ -279,9 +289,9 @@ int main(int argc, char **argv){
         else if(cmd =="exit")
             exitcmd = true; //exit program
         else if(fnMap[cmd]== NULL)
-            cerr<<endl<<"ERROR: Command Not Found"<<endl; //invalid command
+            cerr<<endl<<"ERROR: Command "<<cmd<<" Not Found"<<endl; //invalid command
         else
-            fnMap[cmd](tosearch,matrix); //call the function
+            fnMap[cmd](tosearch,m1); //call the function
         
 		
 	}
