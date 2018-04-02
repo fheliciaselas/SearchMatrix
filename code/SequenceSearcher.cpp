@@ -4,8 +4,8 @@
 #include<iostream>
 #include<vector>
 #include<unordered_map>
-#include<boost/algorithm/searching/knuth_morris_pratt.hpp>
-
+//#include<boost/algorithm/searching/knuth_morris_pratt.hpp>
+#include<algorithm>
 
 
 SequenceSearcher::SequenceSearcher(std::vector<std::vector<int > > m, std::unordered_map< int, std::unordered_map <int,int > >  e):Searcher(m,e){
