@@ -37,8 +37,6 @@ void UnorderedSearcher::search(std::vector<int> tosearch){
     }
     
     clock_t end = clock() ;
-    float time = (float) (end - start) / CLOCKS_PER_SEC ;
-    std::cout<<"Searching Time: "<<time<<" seconds"<<std::endl;
     if(rowsfound.size()==0)
         std::cout<<"Match not found in matrix"<<std::endl;
     else
@@ -46,6 +44,9 @@ void UnorderedSearcher::search(std::vector<int> tosearch){
         for(int i = 0;i<rowsfound.size();i++)
             std::cout<<"Numbers found in row: "<<rowsfound[i]<<std::endl;
     }
+    float time = (float) (end - start) / CLOCKS_PER_SEC ;
+    std::cout<<"Searching Time: "<<time<<" seconds"<<std::endl;
+    
 }
 
 
