@@ -36,7 +36,9 @@ void SequenceSearcher::search(std::vector<int> tosearch){
         }
         if(found)
         {
-            if(boost::algorithm::knuth_morris_pratt_search(matrix[i].begin(), matrix[i].end(),tosearch.begin(), tosearch.end()).first != matrix[i].end()){
+            //if(boost::algorithm::knuth_morris_pratt_search(matrix[i].begin(), matrix[i].end(),tosearch.begin(), tosearch.end()).first != matrix[i].end()){ // need gcc 5.5 +
+            if(std::search(matrix[i].begin(), matrix[i].end(),tosearch.begin(), tosearch.end()) != matrix[i].end()){
+                
                 rowsfound.push_back(i+1);
             }
             
