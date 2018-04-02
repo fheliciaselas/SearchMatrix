@@ -1,8 +1,16 @@
 SEARCH MATRIX - NETVIRTA CHALLENGE
 
-Updated code in code folder  /
+Updated code in code folder  
+/
+Run as ./MatrixSearcher ../inputfile/encrypted.txt
 /
 
-Run as ./MatrixSearcher ../inputfile/test.txt
+To create encrypt text,
+/
+cd utility
+/
+./encrypt_text ../plaintextfiles/filename
+
+
 
 
