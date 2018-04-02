@@ -1,23 +1,21 @@
 #include<vector>
 #include<unordered_map>
 
-using namespace std;
-
 #ifndef SEARCHER
 #define SEARCHER
 
 class Searcher{
     
     public:
-        vector< vector<int > > matrix;
-        unordered_map< int, unordered_map <int,int > >  elementCountMap;
+    std::vector< std::vector<int > > matrix;
+        std::unordered_map< int, std::unordered_map <int,int > >  elementCountMap;
     
     
-    Searcher(vector< vector<int > > m, unordered_map< int, unordered_map <int,int > >  e);
+    Searcher(std::vector< std::vector<int > > m, std::unordered_map< int, std::unordered_map <int,int > >  e);
 
    virtual ~Searcher();
     
-    virtual void search(vector<int>) = 0;
+    virtual void search(std::vector<int>) = 0;
 };
 
 #endif

@@ -3,7 +3,6 @@
 #include<vector>
 #include<unordered_map>
 
-using namespace std;
 
 #ifndef UNORDEREDSEARCHER
 #define UNORDEREDSEARCHER
@@ -11,9 +10,9 @@ using namespace std;
 class UnorderedSearcher : public Searcher{
     
 public:
-    UnorderedSearcher(vector< vector<int > > m, unordered_map< int, unordered_map <int,int > >  e);
+    UnorderedSearcher(std::vector< std::vector<int > > m, std::unordered_map< int, std::unordered_map <int,int > >  e);
     
-    void search(vector<int> tosearch);
+    void search(std::vector<int> tosearch);
     
 };
 

@@ -3,16 +3,16 @@
 #include<vector>
 #include<unordered_map>
 
-using namespace std;
+
 #ifndef SEQUENCESEARCHER
 #define SEQUENCESEARCHER
 
 class SequenceSearcher : public Searcher{
     
 public:
-    SequenceSearcher(vector< vector<int > > m, unordered_map< int, unordered_map <int,int > >  e);
+    SequenceSearcher(std::vector< std::vector<int > > m, std::unordered_map< int, std::unordered_map <int,int > >  e);
     
-    void search(vector<int> tosearch);
+    void search(std::vector<int> tosearch);
     
 };
 

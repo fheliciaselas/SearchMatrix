@@ -13,12 +13,11 @@
 #include "UnorderedSearcher.h"
 #include "MaxMatchSearcher.h"
 
-using namespace std;
 
-string decrypt(string raw_text)
+std::string decrypt(std::string raw_text)
 {
     const char key = 'N';
-    string output = raw_text;
+    std::string output = raw_text;
     int len = output.size();
     for(int i=0;i<len;i++){
         output[i] = raw_text[i] ^ key;
@@ -29,21 +28,21 @@ string decrypt(string raw_text)
 
 void listAvailableCommands(){
     
-    cout<<endl<<"Available Commands are: "<<endl;
-    cout<<endl;
-    cout<<"1. searchSequence "<<endl<<"2. searchUnordered "<<endl<<"3. searchMaxMatch "<<endl<<"4. exit "<<endl<<endl;
-    cout<<"usage example: searchSequence 1 2 3"<<endl;
+    std::cout<<std::endl<<"Available Commands are: "<<std::endl;
+    std::cout<<std::endl;
+    std::cout<<"1. searchSequence "<<std::endl<<"2. searchUnordered "<<std::endl<<"3. searchMaxMatch "<<std::endl<<"4. exit "<<std::endl<<std::endl;
+    std::cout<<"usage example: searchSequence 1 2 3"<<std::endl;
 }
 
 void printRunCommand(){
-    cout<<endl<<"Please specify input file name"<<endl;
-    cout<<endl<<"Run as ./search.o test.txt"<<endl;
+    std::cout<<std::endl<<"Please specify input file name"<<std::endl;
+    std::cout<<std::endl<<"Run as ./MatrixSearcher ../inputfile/test.txt"<<std::endl;
 }
 
-void  openAndParseData(char **argv, unordered_map< int, unordered_map <int,int > >  &elementCountMap, vector < vector <int > > &matrix ){
+void  openAndParseData(char **argv, std::unordered_map< int, std::unordered_map <int,int > >  &elementCountMap, std::vector < std::vector <int > > &matrix ){
     
-    ifstream input_file;
-    string rawdata,parsed;
+    std::ifstream input_file;
+    std::string rawdata,parsed;
     
     input_file.open(argv[1]); //opening the input file
     
@@ -53,20 +52,20 @@ void  openAndParseData(char **argv, unordered_map< int, unordered_map <int,int >
         
         while(getline(input_file,rawdata)){
             
-            unordered_map<int,int> temp;
-            vector <int> row;
+            std::unordered_map<int,int> temp;
+            std::vector <int> row;
             
             parsed = decrypt(rawdata); //decrypting each row in the data
-            istringstream iss(parsed);
+            std::istringstream iss(parsed);
             
-            for(string s; iss >> s;){
+            for(std::string s; iss >> s;){
                 
                 int x=0;
                 
-                stringstream ss(s);
+                std::stringstream ss(s);
                 ss >> x; //write string to integer
                 
-                row.push_back(x); // push to vector 'row'
+                row.push_back(x); // push to std::vector 'row'
                 
                 if(temp.count(x)==0){  //check if element not present
                     temp[x] =1; // then set count to 1
@@ -77,7 +76,7 @@ void  openAndParseData(char **argv, unordered_map< int, unordered_map <int,int >
                 
             }
             elementCountMap[row_count] = temp; // map of count of elements added to key = row number
-            matrix.push_back(row); // add the 'row' vector to the matrix
+            matrix.push_back(row); // add the 'row' std::vector to the matrix
             row_count++;
         }
     }
@@ -85,25 +84,25 @@ void  openAndParseData(char **argv, unordered_map< int, unordered_map <int,int >
     input_file.close();
 }
 
-void parseCommandInput(string &cmd,vector<int> &tosearch,string line, bool &allnumbers){
+void parseCommandInput(std::string &cmd,std::vector<int> &tosearch,std::string line, bool &allnumbers){
     
     int found=0,pos=0;
     bool first = false;
-    while((found = line.find_first_of(' ',pos))!= string::npos){
+    while((found = line.find_first_of(' ',pos))!= std::string::npos){
         
-        string s = line.substr(pos,found - pos);
+        std::string s = line.substr(pos,found - pos);
         if(!first){
             cmd = s;
             first = true;
         }
         else
         {
-            stringstream tmp(s);
+            std::stringstream tmp(s);
             int x = 0;
             tmp >> x;
-            if(to_string(x) != s)
+            if(std::to_string(x) != s)
             {
-                cerr<<endl<<"ERROR: Invalid input"<<endl;
+                std::cerr<<std::endl<<"ERROR: Invalid input"<<std::endl;
                 allnumbers = false;
                 return;
             }
@@ -116,14 +115,14 @@ void parseCommandInput(string &cmd,vector<int> &tosearch,string line, bool &alln
         cmd = line.substr(pos);
     }
     else{
-        stringstream tmp(line.substr(pos));
+        std::stringstream tmp(line.substr(pos));
         int x = 0;
         tmp >> x;
         tosearch.push_back(x);
     }
     
 }
-Searcher* getSearchObject(string cmd, vector< vector<int > > matrix, unordered_map< int, unordered_map <int,int > >  elementCountMap){
+Searcher* getSearchObject(std::string cmd, std::vector< std::vector<int > > matrix, std::unordered_map< int, std::unordered_map <int,int > >  elementCountMap){
     
     if(cmd =="searchSequence")
         return new SequenceSearcher(matrix,elementCountMap);
@@ -136,8 +135,8 @@ Searcher* getSearchObject(string cmd, vector< vector<int > > matrix, unordered_m
 }
 int main(int argc, char **argv){
 
-    vector< vector<int > > matrix;  // 2D representation of matrix
-    unordered_map <int,unordered_map<int,int> > elementCountMap; //count of each element in a row in the matrix
+    std::vector< std::vector<int > > matrix;  // 2D representation of matrix
+    std::unordered_map <int,std::unordered_map<int,int> > elementCountMap; //count of each element in a row in the matrix
     
     bool allnumbers;    //to check if entered integers are all numbers
     bool exitcmd = false; // command 'exit' has not been entered till now
@@ -150,31 +149,31 @@ int main(int argc, char **argv){
     
     listAvailableCommands(); //list all available search options
     
-    cout<<"Decrypting input file and parsing. Please wait for completion"<<endl;
+    std::cout<<"Decrypting input file and parsing. Please wait for completion"<<std::endl;
     openAndParseData(argv, elementCountMap,matrix); // decrypt the text file and store in map in memory
-    cout<<"End parsing"<<endl;
+    std::cout<<"End parsing"<<std::endl;
     
     Searcher *s;
    
     while(!exitcmd){
         
-        string cmd,line;
-        vector<int> tosearch; // sequence or numbers to be searched
+        std::string cmd,line;
+        std::vector<int> tosearch; // sequence or numbers to be searched
         
-        cout<<endl<<"Enter command: "<<endl;
-        getline(cin,line);
+        std::cout<<std::endl<<"Enter command: "<<std::endl;
+        getline(std::cin,line);
         allnumbers = true;
         parseCommandInput(cmd,tosearch,line,allnumbers); //parse line to seperate command from numbers.
         //also check if all are integers
         
         if(!allnumbers)
-            cerr<<"ERROR : Please enter only integers"<<endl;
+            std::cerr<<"ERROR : Please enter only integers"<<std::endl;
         else if(tosearch.size()==0 && cmd !="exit")
-            cerr<<endl<<"ERROR: Please input integers to search"<<endl;
+            std::cerr<<std::endl<<"ERROR: Please input integers to search"<<std::endl;
         else if(cmd =="exit")
             exitcmd = true; //exit program
         /*else if(fnMap[cmd]== NULL)
-            cerr<<endl<<"ERROR: Command "<<cmd<<" Not Found"<<endl; //invalid command
+            std::cerr<<std::endl<<"ERROR: Command "<<cmd<<" Not Found"<<std::endl; //invalid command
         else
             fnMap[cmd](tosearch,m1); //call the function
          */
@@ -183,12 +182,14 @@ int main(int argc, char **argv){
         {
             s = getSearchObject(cmd,matrix,elementCountMap);
             if(s==NULL)
-                cout<<"Invalid Command"<<endl;
+                std::cout<<"Invalid Command"<<std::endl;
             else
                 s->search(tosearch);
         }
         
     }
+    
+    delete s;
 }
 
 

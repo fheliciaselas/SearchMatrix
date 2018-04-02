@@ -4,17 +4,17 @@
 #include<vector>
 #include<unordered_map>
 
-using namespace std;
 
-UnorderedSearcher::UnorderedSearcher(vector< vector<int > > m, unordered_map< int, unordered_map <int,int > >  e):Searcher(m,e){
+
+UnorderedSearcher::UnorderedSearcher(std::vector<std::vector<int > > m, std::unordered_map< int, std::unordered_map <int,int > >  e):Searcher(m,e){
     
 }
 
-void UnorderedSearcher::search(vector<int> tosearch){
+void UnorderedSearcher::search(std::vector<int> tosearch){
     
     int len = tosearch.size();
-    vector<int> rowsfound;
-    cout<<"Searching Unordered "<<endl;
+   std::vector<int> rowsfound;
+    std::cout<<"Searching Unordered "<<std::endl;
     
     clock_t start = clock() ;
     
@@ -38,13 +38,13 @@ void UnorderedSearcher::search(vector<int> tosearch){
     
     clock_t end = clock() ;
     float time = (float) (end - start) / CLOCKS_PER_SEC ;
-    cout<<"Searching Time: "<<time<<" seconds"<<endl;
+    std::cout<<"Searching Time: "<<time<<" seconds"<<std::endl;
     if(rowsfound.size()==0)
-        cout<<"Match not found in matrix"<<endl;
+        std::cout<<"Match not found in matrix"<<std::endl;
     else
     {
         for(int i = 0;i<rowsfound.size();i++)
-            cout<<"Numbers found in row: "<<rowsfound[i]<<endl;
+            std::cout<<"Numbers found in row: "<<rowsfound[i]<<std::endl;
     }
 }
 

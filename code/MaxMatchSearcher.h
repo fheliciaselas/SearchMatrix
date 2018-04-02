@@ -4,7 +4,6 @@
 #include<vector>
 #include<unordered_map>
 
-using namespace std;
 
 #ifndef MAXMATCHSEARCHER
 #define MAXMATCHSEARCHER
@@ -12,9 +11,9 @@ using namespace std;
 class MaxMatchSearcher : public Searcher{
     
 public:
-    MaxMatchSearcher(vector< vector<int > > m, unordered_map< int, unordered_map <int,int > >  e);
+    MaxMatchSearcher(std::vector< std::vector<int > > m, std::unordered_map< int, std::unordered_map <int,int > >  e);
     
-    void search(vector<int> tosearch);
+    void search(std::vector<int> tosearch);
     
 };
 

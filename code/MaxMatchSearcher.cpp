@@ -1,20 +1,16 @@
 #include "MaxMatchSearcher.h"
 
 #include<iostream>
-#include<vector>
-#include<unordered_map>
 
-using namespace std;
-
-MaxMatchSearcher::MaxMatchSearcher(vector< vector<int > > m, unordered_map< int, unordered_map <int,int > >  e):Searcher(m,e){
+MaxMatchSearcher::MaxMatchSearcher(std::vector< std::vector<int > > m, std::unordered_map< int, std::unordered_map <int,int > >  e):Searcher(m,e){
     
 }
 
-void MaxMatchSearcher::search(vector<int> tosearch){
+void MaxMatchSearcher::search(std::vector<int> tosearch){
     
     int len = tosearch.size();
-    vector<int> rowsfound;
-    cout<<"Searching Max Match rows "<<endl;
+    std::vector<int> rowsfound;
+    std::cout<<"Searching Max Match rows "<<std::endl;
     int s = elementCountMap.size(); //rows
     int maxrow = -1, max = 0;
     
@@ -40,15 +36,15 @@ void MaxMatchSearcher::search(vector<int> tosearch){
     
     clock_t end = clock() ;
     float time = (float) (end - start) / CLOCKS_PER_SEC ;
-    cout<<"Searching Time: "<<time<<" seconds"<<endl;
+    std::cout<<"Searching Time: "<<time<<" seconds"<<std::endl;
     if(rowsfound.size()==0)
-        cout<<"Match not found in matrix"<<endl;
+        std::cout<<"Match not found in matrix"<<std::endl;
     else
     {
-        cout<<"Max Matched found in row(s): ";
+        std::cout<<"Max Matched found in row(s): ";
         for(int i = 0;i<rowsfound.size();i++)
-            cout<<rowsfound[i]<<" ";
-        cout<<endl;
+            std::cout<<rowsfound[i]<<" ";
+        std::cout<<std::endl;
     }
     
 

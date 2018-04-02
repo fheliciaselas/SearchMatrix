@@ -1,15 +1,14 @@
 #include <iostream>
-using namespace std;
 
 #include "Searcher.h"
 
-Searcher::Searcher(vector< vector<int > > m, unordered_map< int, unordered_map <int,int > >  e){
+Searcher::Searcher(std::vector< std::vector<int > > m, std::unordered_map< int, std::unordered_map <int,int > >  e){
     
     matrix = m;
     elementCountMap = e;
-    cout<<"Initializing Matrix Information"<<endl;
+    std::cout<<"Initializing Matrix Information"<<std::endl;
 }
 
 Searcher::~Searcher(){
-    cout<<"Destructing Searcher";
+    std::cout<<"Destructing Searcher";
 }
