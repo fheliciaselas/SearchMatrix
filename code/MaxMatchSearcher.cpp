@@ -2,25 +2,31 @@
 
 #include<iostream>
 
-MaxMatchSearcher::MaxMatchSearcher(std::vector< std::vector<int > > m, std::unordered_map< int, std::unordered_map <int,int > >  e):Searcher(m,e){
+MaxMatchSearcher::MaxMatchSearcher(std::vector< std::vector<int > > &m, std::unordered_map< int, std::unordered_map <int,int > >  &e):Searcher(m,e){
+    std::cout<<"Constructing MaxMatch Searcher Obj"<<std::endl;
+
+}
+MaxMatchSearcher::~MaxMatchSearcher(){
+    std::cout<<"Destructing MaxMatch Searcher Obj"<<std::endl;
     
 }
 
-void MaxMatchSearcher::search(std::vector<int> tosearch){
+void MaxMatchSearcher::search(std::vector<int> &tosearch){
     
     int len = tosearch.size();
     std::vector<int> rowsfound;
     std::cout<<"Searching Max Match rows "<<std::endl;
     int s = elementCountMap.size(); //rows
     int maxrow = -1, max = 0;
-    
+    std::unordered_map< int, std::unordered_map <int,int > >  e = elementCountMap;
+
     clock_t start = clock() ;
     for(int i=0;i<s;i++){ //for each row
         int count = 0;
         for(int j=0;j<len;j++){ //for the length of the substring
-            if(elementCountMap[i][tosearch[j]] > 0){
+            if(e[i][tosearch[j]] > 0){
                 ++count;
-                elementCountMap[i][tosearch[j]] -= 1;
+                e[i][tosearch[j]] -= 1;
             }
         }
         if(count > max){

@@ -6,31 +6,38 @@
 
 
 
-UnorderedSearcher::UnorderedSearcher(std::vector<std::vector<int > > m, std::unordered_map< int, std::unordered_map <int,int > >  e):Searcher(m,e){
+UnorderedSearcher::UnorderedSearcher(std::vector<std::vector<int > > &m, std::unordered_map< int, std::unordered_map <int,int > >  &e):Searcher(m,e){
+    
+    std::cout<<"Creating Unordered Searcher Obj"<<std::endl;
+
+}
+UnorderedSearcher::~UnorderedSearcher(){
+
+    std::cout<<"Destructing Unordered Searcher Obj"<<std::endl;
     
 }
-
-void UnorderedSearcher::search(std::vector<int> tosearch){
+void UnorderedSearcher::search(std::vector<int> &tosearch){
     
     int len = tosearch.size();
    std::vector<int> rowsfound;
     std::cout<<"Searching Unordered "<<std::endl;
     
-    clock_t start = clock() ;
     
     int s = elementCountMap.size(); //rows
+    std::unordered_map< int, std::unordered_map <int,int > >  e = elementCountMap;
+    clock_t start = clock() ;
     
     for(int i=0;i<s;i++){ //for each row
         bool found = true;
         
         for(int j=0;j<len;j++){ //for len of substring
             int key = tosearch[j];
-            if(elementCountMap[i].count(key) == 0 || elementCountMap[i][key] == 0){
+            if(e[i][key] == 0){
                 found = false;
                 break;
             }
             else
-                elementCountMap[i][key] -= 1;
+                e[i][key] -= 1;
         }
         if(found)
             rowsfound.push_back(i+1);

@@ -11,9 +11,11 @@
 class MaxMatchSearcher : public Searcher{
     
 public:
-    MaxMatchSearcher(std::vector< std::vector<int > > m, std::unordered_map< int, std::unordered_map <int,int > >  e);
+    MaxMatchSearcher(std::vector< std::vector<int > > &m, std::unordered_map< int, std::unordered_map <int,int > >  &e);
     
-    void search(std::vector<int> tosearch);
+    void search(std::vector<int> &tosearch);
+    
+    virtual ~MaxMatchSearcher();
     
 };
 

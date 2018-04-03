@@ -8,17 +8,20 @@
 #include<algorithm>
 
 
-SequenceSearcher::SequenceSearcher(std::vector<std::vector<int > > m, std::unordered_map< int, std::unordered_map <int,int > >  e):Searcher(m,e){
-    
-}
+SequenceSearcher::SequenceSearcher(std::vector<std::vector<int > > &m, std::unordered_map< int, std::unordered_map <int,int > >  &e):Searcher(m,e){
+    std::cout<<"Creating Sequence Searcher Obj"<<std::endl;
 
-void SequenceSearcher::search(std::vector<int> tosearch){
+}
+SequenceSearcher::~SequenceSearcher(){
+    std::cout<<"Destructing Sequence Searcher Obj"<<std::endl;
+}
+void SequenceSearcher::search(std::vector<int> &tosearch){
     
     int rows = matrix.size();
     int len = tosearch.size();
    std::vector<int> rowsfound;
     int s = elementCountMap.size();
-    
+    std::unordered_map< int, std::unordered_map <int,int > >  e = elementCountMap;
     clock_t start = clock() ;
     
     
@@ -27,12 +30,12 @@ void SequenceSearcher::search(std::vector<int> tosearch){
         
         for(int j=0;j<len;j++){
             int key = tosearch[j];
-            if(elementCountMap[i].count(key) == 0 || elementCountMap[i][key] == 0){
+            if(e[i].count(key) == 0 || e[i][key] == 0){
                 found = false;
                 break;
             }
             else
-                elementCountMap[i][key] -= 1;
+                e[i][key] -= 1;
         }
         if(found)
         {
