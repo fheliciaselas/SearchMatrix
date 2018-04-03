@@ -6,9 +6,8 @@
 #include<boost/algorithm/searching/knuth_morris_pratt.hpp>
 #include<string>
 #include<time.h>
-#include<map>
 #include<unordered_map>
-
+#include<map>
 #include "SequenceSearcher.h"
 #include "UnorderedSearcher.h"
 #include "MaxMatchSearcher.h"
@@ -83,6 +82,7 @@ void parseCommandInput(std::string &cmd,std::vector<int> &tosearch,std::string &
     
     int found=0,pos=0;
     bool first = false;
+    
     while((found = line.find_first_of(' ',pos))!= std::string::npos){
         
         std::string s = line.substr(pos,found - pos);
@@ -95,6 +95,7 @@ void parseCommandInput(std::string &cmd,std::vector<int> &tosearch,std::string &
             std::stringstream tmp(s);
             int x = 0;
             tmp >> x;
+            //std::cout<<"s: "<<s<<std::endl;
             if(std::to_string(x) != s)
             {
                 std::cerr<<std::endl<<"ERROR: Invalid input"<<std::endl;
@@ -106,14 +107,17 @@ void parseCommandInput(std::string &cmd,std::vector<int> &tosearch,std::string &
         }
         pos = found+1;
     }
+    std::string s= line.substr(pos);
     if(!first){
-        cmd = line.substr(pos);
+        cmd = s;
     }
     else{
-        std::stringstream tmp(line.substr(pos));
+        
+        std::stringstream tmp(s);
         int x = 0;
         tmp >> x;
-        tosearch.push_back(x);
+        if(std::to_string(x) == s)
+            tosearch.push_back(x);
     }
 }
 

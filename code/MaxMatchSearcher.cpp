@@ -41,8 +41,6 @@ void MaxMatchSearcher::search(std::vector<int> &tosearch){
     }
     
     clock_t end = clock() ;
-    float time = (float) (end - start) / CLOCKS_PER_SEC ;
-    std::cout<<"Searching Time: "<<time<<" seconds"<<std::endl;
     if(rowsfound.size()==0)
         std::cout<<"Match not found in matrix"<<std::endl;
     else
@@ -52,6 +50,8 @@ void MaxMatchSearcher::search(std::vector<int> &tosearch){
             std::cout<<rowsfound[i]<<" ";
         std::cout<<std::endl;
     }
+    float time = (float) (end - start) / CLOCKS_PER_SEC ;
+    std::cout<<"Searching Time: "<<time<<" seconds"<<std::endl;
     
 
 }
