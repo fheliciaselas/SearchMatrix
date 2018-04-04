@@ -6,15 +6,11 @@
 
 class Searcher{
     
-    protected:
-        const std::vector< std::vector<int > > &matrix;
-        const std::unordered_map< int, std::unordered_map <int,int > >  &elementCountMap;
-    
     public:
     
-    Searcher(std::vector< std::vector<int > > &m, std::unordered_map< int, std::unordered_map <int,int > >  &e);
+    Searcher();
     virtual ~Searcher();
-    virtual void search(std::vector<int> &) = 0;
+    virtual void search(std::vector<int> &tosearch,std::vector< std::vector<int > > &matrix, std::unordered_map< unsigned int, std::unordered_map <int,unsigned int > >  &elementCountMap) = 0;
 };
 
 #endif

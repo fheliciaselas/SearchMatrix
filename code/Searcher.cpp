@@ -2,7 +2,7 @@
 
 #include "Searcher.h"
 
-Searcher::Searcher(std::vector< std::vector<int > > &m, std::unordered_map< int, std::unordered_map <int,int > >  &e):matrix(m),elementCountMap(e){
+Searcher::Searcher(){
     
    
     //std::cout<<"Initializing Matrix Information"<<std::endl;

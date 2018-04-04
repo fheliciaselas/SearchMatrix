@@ -10,9 +10,9 @@
 class UnorderedSearcher : public Searcher{
     
 public:
-    UnorderedSearcher(std::vector< std::vector<int > > &m, std::unordered_map< int, std::unordered_map <int,int > >  &e);
+    UnorderedSearcher();
     
-    void search(std::vector<int> &tosearch);
+    void search(std::vector<int> &tosearch,std::vector< std::vector<int > > &matrix, std::unordered_map< unsigned int, std::unordered_map <int,unsigned int > >  &elementCountMap);
     
     virtual ~UnorderedSearcher();
 };

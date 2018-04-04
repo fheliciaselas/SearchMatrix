@@ -3,7 +3,6 @@
 #include<vector>
 #include<sstream>
 #include<algorithm>
-#include<boost/algorithm/searching/knuth_morris_pratt.hpp>
 #include<string>
 #include<time.h>
 #include<unordered_map>
@@ -11,20 +10,11 @@
 #include "SequenceSearcher.h"
 #include "UnorderedSearcher.h"
 #include "MaxMatchSearcher.h"
+#include "SearchFunction.h"
 
 std::map<std::string, Searcher *> searchmap;
 
-std::string decrypt(std::string raw_text)
-{
-    const char key = 'N';
-    std::string output = raw_text;
-    int len = output.size();
-    for(int i=0;i<len;i++){
-        output[i] = raw_text[i] ^ key;
-    }
-    
-    return output;
-}
+
 
 void listAvailableCommands(){
     
@@ -39,44 +29,6 @@ void printRunCommand(){
     std::cout<<std::endl<<"Run as ./MatrixSearcher ../inputfile/test.txt"<<std::endl;
 }
 
-void  openAndParseData(char **argv, std::unordered_map< int, std::unordered_map <int,int > >  &elementCountMap, std::vector < std::vector <int > > &matrix ){
-    
-    std::ifstream input_file;
-    std::string rawdata,parsed;
-    input_file.open(argv[1]); //opening the input file
-    int row_count=0;
-    
-    if(input_file.is_open()){
-        
-        while(getline(input_file,rawdata)){
-            
-            std::unordered_map<int,int> temp;
-            std::vector <int> row;
-            parsed = decrypt(rawdata); //decrypting each row in the data
-            std::istringstream iss(parsed);
-            
-            for(std::string s; iss >> s;){
-               
-                int x=0;
-                std::stringstream ss(s);
-                ss >> x; //write string to integer
-                row.push_back(x); // push to std::vector 'row'
-                if(temp.count(x)==0)  //check if element not present
-                    temp[x] =1; // then set count to 1
-                else
-                    temp[x] = temp[x]+1; // increment count of element
-            
-            }
-            
-            elementCountMap[row_count] = temp; // map of count of elements added to key = row number
-            matrix.push_back(row); // add the 'row' std::vector to the matrix
-            row_count++;
-        }
-        
-    }
-    
-    input_file.close();
-}
 
 void parseCommandInput(std::string &cmd,std::vector<int> &tosearch,std::string &line, bool &allnumbers){
     
@@ -122,27 +74,22 @@ void parseCommandInput(std::string &cmd,std::vector<int> &tosearch,std::string &
 }
 
 
-void createMap(std::vector< std::vector<int > > &matrix, std::unordered_map< int, std::unordered_map <int,int > >  &elementCountMap){
+void createMap(){
  
-    searchmap["searchSequence"]= new SequenceSearcher(matrix,elementCountMap);
-    searchmap["searchUnordered"]= new UnorderedSearcher(matrix,elementCountMap);
-    searchmap["searchMaxMatch"]= new MaxMatchSearcher(matrix,elementCountMap);
+    searchmap["searchSequence"]= new SequenceSearcher();
+    searchmap["searchUnordered"]= new UnorderedSearcher();
+    searchmap["searchMaxMatch"]= new MaxMatchSearcher();
 
 }
 
 void freemap(){
-    for(auto it = searchmap.begin();it!=searchmap.end();it++){
+    for(auto it = searchmap.begin();it!=searchmap.end();++it){
         delete it->second;
     }
 }
 
 int main(int argc, char **argv){
 
-    std::vector< std::vector<int > > matrix;  // 2D representation of matrix
-    std::unordered_map <int,std::unordered_map<int,int> > elementCountMap; //count of each element in a row in the matrix
-    
-    bool allnumbers;    //to check if entered integers are all numbers
-    bool exitcmd = false; // command 'exit' has not been entered till now
     
     if(argc < 2) //If Input file not entered
     {
@@ -152,12 +99,18 @@ int main(int argc, char **argv){
     
     listAvailableCommands(); //list all available search options
     
+    SearchFunction sfn;
+    
     std::cout<<"Decrypting input file and parsing. Please wait for completion"<<std::endl;
-    openAndParseData(argv, elementCountMap,matrix); // decrypt the text file and store in map in memory //pass by ref
+    sfn.openAndParseData(argv); // decrypt the text file and store in map in memory //pass by ref
     std::cout<<"End parsing"<<std::endl;
     
-    createMap(matrix,elementCountMap); //pass by ref
+    createMap(); //pass by ref
     Searcher *s;
+    
+    bool allnumbers;    //to check if entered integers are all numbers
+    bool exitcmd = false; // command 'exit' has not been entered till now
+    
     while(!exitcmd){
         
         std::string cmd,line;
@@ -183,7 +136,7 @@ int main(int argc, char **argv){
             if(s==NULL)
                 std::cout<<"Invalid Command"<<std::endl;
             else
-                s->search(tosearch);
+                sfn.search(tosearch,s);
         }
         
         

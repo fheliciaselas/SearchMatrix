@@ -6,7 +6,7 @@
 
 
 
-UnorderedSearcher::UnorderedSearcher(std::vector<std::vector<int > > &m, std::unordered_map< int, std::unordered_map <int,int > >  &e):Searcher(m,e){
+UnorderedSearcher::UnorderedSearcher(){
     
     std::cout<<"Creating Unordered Searcher Obj"<<std::endl;
 
@@ -16,7 +16,7 @@ UnorderedSearcher::~UnorderedSearcher(){
     std::cout<<"Destructing Unordered Searcher Obj"<<std::endl;
     
 }
-void UnorderedSearcher::search(std::vector<int> &tosearch){
+void UnorderedSearcher::search(std::vector<int> &tosearch,std::vector< std::vector<int > > &matrix, std::unordered_map< unsigned int, std::unordered_map <int,unsigned int > >  &elementCountMap){
     
     int len = tosearch.size();
    std::vector<int> rowsfound;
@@ -24,13 +24,13 @@ void UnorderedSearcher::search(std::vector<int> &tosearch){
     
     
     int s = elementCountMap.size(); //rows
-    std::unordered_map< int, std::unordered_map <int,int > >  e = elementCountMap;
+    std::unordered_map <unsigned int,std::unordered_map<int, unsigned int > >  e = elementCountMap;
     clock_t start = clock() ;
     
-    for(int i=0;i<s;i++){ //for each row
+    for(int i=0;i<s;++i){ //for each row
         bool found = true;
         
-        for(int j=0;j<len;j++){ //for len of substring
+        for(int j=0;j<len;++j){ //for len of substring
             int key = tosearch[j];
             if(e[i][key] == 0){
                 found = false;
@@ -48,7 +48,7 @@ void UnorderedSearcher::search(std::vector<int> &tosearch){
         std::cout<<"Match not found in matrix"<<std::endl;
     else
     {
-        for(int i = 0;i<rowsfound.size();i++)
+        for(int i = 0;i<rowsfound.size();++i)
             std::cout<<"Numbers found in row: "<<rowsfound[i]<<std::endl;
     }
     float time = (float) (end - start) / CLOCKS_PER_SEC ;
