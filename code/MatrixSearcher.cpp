@@ -102,7 +102,7 @@ int main(int argc, char **argv){
     SearchFunction sfn;
     
     std::cout<<"Decrypting input file and parsing. Please wait for completion"<<std::endl;
-    sfn.openAndParseData(argv); // decrypt the text file and store in map in memory //pass by ref
+    sfn.openAndParseData(argv[1]); // decrypt the text file and store in map in memory //pass by ref
     std::cout<<"End parsing"<<std::endl;
     
     createMap(); //pass by ref

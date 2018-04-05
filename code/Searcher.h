@@ -10,7 +10,7 @@ class Searcher{
     
     Searcher();
     virtual ~Searcher();
-    virtual void search(std::vector<int> &tosearch,std::vector< std::vector<int > > &matrix, std::unordered_map< unsigned int, std::unordered_map <int,unsigned int > >  &elementCountMap) = 0;
+    virtual std::vector<int> search(std::vector<int> &tosearch,std::vector< std::vector<int > > &matrix, std::unordered_map< unsigned int, std::unordered_map <int,unsigned int > >  &elementCountMap) = 0;
 };
 
 #endif

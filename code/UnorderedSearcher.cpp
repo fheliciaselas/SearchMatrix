@@ -16,43 +16,39 @@ UnorderedSearcher::~UnorderedSearcher(){
     std::cout<<"Destructing Unordered Searcher Obj"<<std::endl;
     
 }
-void UnorderedSearcher::search(std::vector<int> &tosearch,std::vector< std::vector<int > > &matrix, std::unordered_map< unsigned int, std::unordered_map <int,unsigned int > >  &elementCountMap){
+std::vector<int> UnorderedSearcher::search(std::vector<int> &tosearch,std::vector< std::vector<int > > &matrix, std::unordered_map< unsigned int, std::unordered_map <int,unsigned int > >  &elementCountMap){
     
-    int len = tosearch.size();
    std::vector<int> rowsfound;
-    std::cout<<"Searching Unordered "<<std::endl;
+   clock_t start = clock() ;
     
-    
-    int s = elementCountMap.size(); //rows
-    std::unordered_map <unsigned int,std::unordered_map<int, unsigned int > >  e = elementCountMap;
-    clock_t start = clock() ;
-    
-    for(int i=0;i<s;++i){ //for each row
+    for(int i=0,s = elementCountMap.size();i<s;++i){ //for each row
         bool found = true;
-        
-        for(int j=0;j<len;++j){ //for len of substring
+        std::unordered_map<int, unsigned int > &temp = elementCountMap[i];
+        for(int j=0,len = tosearch.size();j<len;++j){ //for len of substring
             int key = tosearch[j];
-            if(e[i][key] == 0){
+            
+            if(temp.count(key) == 0 || temp[key] < std::count(tosearch.begin(),tosearch.end(),key)){
                 found = false;
                 break;
             }
-            else
-                e[i][key] -= 1;
+            
+           
         }
         if(found)
             rowsfound.push_back(i+1);
     }
     
     clock_t end = clock() ;
-    if(rowsfound.size()==0)
+  /*  if(rowsfound.size()==0)
         std::cout<<"Match not found in matrix"<<std::endl;
     else
     {
         for(int i = 0;i<rowsfound.size();++i)
             std::cout<<"Numbers found in row: "<<rowsfound[i]<<std::endl;
-    }
+    }*/
     float time = (float) (end - start) / CLOCKS_PER_SEC ;
     std::cout<<"Searching Time: "<<time<<" seconds"<<std::endl;
+    return rowsfound;
     
 }
 

@@ -17,8 +17,8 @@ public:
     
     SearchFunction();
     virtual ~SearchFunction();
-    void search(std::vector<int> &tosearch, Searcher *s) ;
-    void openAndParseData(char **argv);
+    std::vector<int> search(std::vector<int> &tosearch, Searcher *s) ;
+    void openAndParseData(char *argv);
         
 };
 

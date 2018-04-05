@@ -3,10 +3,24 @@
 #include<vector>
 #include<sstream>
 #include<fstream>
+#include<iostream>
 
-void SearchFunction::search(std::vector<int> &tosearch, Searcher *s) {
+std::vector<int> SearchFunction::search(std::vector<int> &tosearch, Searcher *s) {
     
-    s->search(tosearch, matrix,elementCountMap);
+    
+    std::vector<int> rowsfound = s->search(tosearch, matrix,elementCountMap);
+    if(rowsfound.size()==0)
+        std::cout<<"Not found in matrix"<<std::endl;
+    else
+    {
+        std::cout<<"Found in row(s): ";
+        for(int i = 0;i<rowsfound.size();i++)
+            std::cout<<rowsfound[i]<<" ";
+        std::cout<<std::endl;
+    }
+    
+    return rowsfound;
+    
 }
 
 
@@ -30,11 +44,11 @@ std::string SearchFunction::decrypt(std::string raw_text)
     return output;
 }
 
-void  SearchFunction::openAndParseData(char **argv){
+void  SearchFunction::openAndParseData(char *argv){
     
     std::ifstream input_file;
     std::string rawdata,parsed;
-    input_file.open(argv[1]); //opening the input file
+    input_file.open(argv); //opening the input file
     int row_count=0;
     
     if(input_file.is_open()){
@@ -65,6 +79,8 @@ void  SearchFunction::openAndParseData(char **argv){
         }
         
     }
+    else
+        std::cout<<"Unable to openfile"<<std::endl;
     
     input_file.close();
 }
