@@ -7,8 +7,14 @@
 
 std::vector<int> SearchFunction::search(std::vector<int> &tosearch, Searcher *s) {
     
-    
+    clock_t start = clock() ;
     std::vector<int> rowsfound = s->search(tosearch, matrix,elementCountMap);
+    clock_t end = clock() ;
+    
+    float time = (float) (end - start) / CLOCKS_PER_SEC ;
+    std::cout<<"Searching Time: "<<time<<" seconds"<<std::endl;
+    
+    
     if(rowsfound.size()==0)
         std::cout<<"Not found in matrix"<<std::endl;
     else
