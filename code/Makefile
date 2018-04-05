@@ -8,7 +8,7 @@ Searcher.o: Searcher.h Searcher.cpp
 	g++ -c -O2 Searcher.cpp -std=c++11
 
 SearchFunction.o: SearchFunction.h SearchFunction.cpp
-    g++ -c -O2 SearchFunction.cpp -std=c++11
+	g++ -c -O2 SearchFunction.cpp -std=c++11
 
 SequenceSearcher.o: SequenceSearcher.h SequenceSearcher.cpp Searcher.h
 	g++ -c -O2 SequenceSearcher.cpp -std=c++11
