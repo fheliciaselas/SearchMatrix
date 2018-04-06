@@ -30,6 +30,7 @@ int main(){
     
     testSequence(sf);
     testUnordered(sf);
+    testMaxMatch(sf);
 }
 
 
@@ -102,7 +103,7 @@ void TestUnordInRow1(SearchFunction &sf, Searcher *u){
 void TestUnordInRow5(SearchFunction &sf, Searcher *u){
     
     std::cout<<"Case 2: Numbers in row 5"<<std::endl;
-    std::vector<int> tosearch = {14,8,10,7};
+    std::vector<int> tosearch = {14,1,10,7};
     std::vector<int> expected = {5};
     std::vector<int> result = sf.search(tosearch,u);
     printResult(expected,result);
@@ -146,7 +147,59 @@ void testUnordered(SearchFunction &sf){
 
 
 
+//MaxMatch
 
+
+void TestMaxMatchInRow1(SearchFunction &sf, Searcher *u){
+    
+    std::cout<<"Case 1: Numbers in Row 1"<<std::endl;
+    std::vector<int> tosearch = {1,4,9,0};
+    std::vector<int> expected = {1};
+    std::vector<int> result = sf.search(tosearch,u);
+    printResult(expected,result);
+}
+void TestMaxMatchInRow5(SearchFunction &sf, Searcher *u){
+    
+    std::cout<<"Case 2: Numbers in row 5"<<std::endl;
+    std::vector<int> tosearch = {14,7,10,7};
+    std::vector<int> expected = {5};
+    std::vector<int> result = sf.search(tosearch,u);
+    printResult(expected,result);
+}
+void TestMaxMatchNotInMatrix(SearchFunction &sf, Searcher *u){
+    
+    std::cout<<"Case 3: Numbers not in Matrix"<<std::endl;
+    std::vector<int> tosearch = {99,199,909,888,676,652};
+    std::vector<int> expected = {};
+    std::vector<int> result = sf.search(tosearch,u);
+    printResult(expected,result);
+}
+void TestExactRepetitionMaxMatchMatrix(SearchFunction &sf, Searcher *u){
+    
+    std::cout<<"Case 4: Numbers with repetitions"<<std::endl;
+    std::vector<int> tosearch = {1,1,1};
+    std::vector<int> expected = {3};
+    std::vector<int> result = sf.search(tosearch,u);
+    printResult(expected,result);
+}
+void TestMaxMatchinAllRows(SearchFunction &sf, Searcher *u){
+    
+    std::cout<<"Case 4: Numbers in all rows"<<std::endl;
+    std::vector<int> tosearch = {1};
+    std::vector<int> expected = {1};
+    std::vector<int> result = sf.search(tosearch,u);
+    printResult(expected,result);
+}
+void testMaxMatch(SearchFunction &sf){
+    
+    Searcher *m = new MaxMatchSearcher();
+    
+    TestMaxMatchInRow1(sf,m);
+    TestMaxMatchInRow5(sf,m);
+    TestMaxMatchNotInMatrix(sf,m);
+    TestExactRepetitionMaxMatchMatrix(sf,m);
+    TestMaxMatchinAllRows(sf,m);
+}
 
 void printarr(std::vector<int> &arr){
     for(int i=0;i<arr.size();i++)
