@@ -17,6 +17,7 @@ public:
     
     SearchFunction();
     virtual ~SearchFunction();
+    float benchmark_search(std::vector<int> &tosearch, Searcher *s) ;
     std::vector<int> search(std::vector<int> &tosearch, Searcher *s) ;
     void openAndParseData(char *argv);
         

@@ -5,6 +5,16 @@
 #include<fstream>
 #include<iostream>
 
+
+float SearchFunction::benchmark_search(std::vector<int> &tosearch, Searcher *s) {
+    clock_t start = clock() ;
+    std::vector<int> rowsfound = s->search(tosearch, matrix,elementCountMap);
+    clock_t end = clock() ;
+    float time = (float) (end - start) / CLOCKS_PER_SEC ;
+    
+    return time;
+}
+
 std::vector<int> SearchFunction::search(std::vector<int> &tosearch, Searcher *s) {
     
     clock_t start = clock() ;
