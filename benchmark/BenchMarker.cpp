@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include<string.h>
 #include "../code/SearchFunction.h"
 #include "../code/SequenceSearcher.h"
 #include "../code/UnorderedSearcher.h"
