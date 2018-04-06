@@ -85,6 +85,8 @@ void testSequence(SearchFunction &sf){
     TestSeqNotInMatrix(sf,sq);
     TestExactRepetitionSeqMatrix(sf,sq);
     TestSeqinAllRows(sf,sq);
+    
+    delete sq;
 }
 
 
@@ -142,6 +144,8 @@ void testUnordered(SearchFunction &sf){
     TestUnordNotInMatrix(sf,u);
     TestExactRepetitionUnordMatrix(sf,u);
     TestUnordinAllRows(sf,u);
+    
+    delete u;
 }
 
 
@@ -200,6 +204,8 @@ void testMaxMatch(SearchFunction &sf){
     TestMaxMatchNotInMatrix(sf,m);
     TestExactRepetitionMaxMatchMatrix(sf,m);
     TestMaxMatchinAllRows(sf,m);
+    
+    delete m;
 }
 
 void printarr(std::vector<int> &arr){

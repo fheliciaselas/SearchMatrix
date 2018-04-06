@@ -4,15 +4,30 @@
 #include<sstream>
 #include<fstream>
 #include<iostream>
+#include<ctime>
 
-
-float SearchFunction::benchmark_search(std::vector<int> &tosearch, Searcher *s) {
-    clock_t start = clock() ;
-    std::vector<int> rowsfound = s->search(tosearch, matrix,elementCountMap);
-    clock_t end = clock() ;
-    float time = (float) (end - start) / CLOCKS_PER_SEC ;
+double SearchFunction::benchmark_search(std::vector<int> &tosearch, Searcher *s) {
+   
     
-    return time;
+    
+    std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+    
+    std::vector<int> rowsfound = s->search(tosearch, matrix,elementCountMap);
+    
+    std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+    
+   /* if(rowsfound.size()==0)
+        std::cout<<"Not found in matrix"<<std::endl;
+    else
+    {
+        std::cout<<"Found in row(s): ";
+        for(int i = 0;i<rowsfound.size();i++)
+            std::cout<<rowsfound[i]<<" ";
+        std::cout<<std::endl;
+    }*/
+    std::chrono::duration<double> diff = t2 - t1;
+    
+    return diff.count();
 }
 
 std::vector<int> SearchFunction::search(std::vector<int> &tosearch, Searcher *s) {
