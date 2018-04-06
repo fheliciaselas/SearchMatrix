@@ -27,10 +27,10 @@ int main(){
 void benchmark_speed(std::vector<int> tosearch,SearchFunction &sf, Searcher *sq,std::string dimensions){
     
     float time=0;
-    for(int i=0;i<10000;i++){
-        time += sf.benchmark_search(tosearch,sq);
+    for(int i=0;i<1000;i++){
+        time = sf.benchmark_search(tosearch,sq);
     }
-    std::cout<<"Time for "<<dimensions<<" matrix: "<<time/10000<<std::endl;
+    std::cout<<"Time for "<<dimensions<<" matrix: "<<time<<std::endl;
 }
 
 void benchmarkMatrix(SearchFunction &sf, Searcher *s, std::vector<int> &tosearch,std::string dimensions){
