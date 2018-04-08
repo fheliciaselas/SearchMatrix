@@ -7,7 +7,7 @@ BenchMarker.o:   ../code/SequenceSearcher.h  ../code/UnorderedSearcher.h  ../cod
 
 clean:
 	@rm -f *.o
-	@rm -f Benchmarker 
+	@rm -f BenchMarker 
 	@echo "Cleaning Files"
 
 
