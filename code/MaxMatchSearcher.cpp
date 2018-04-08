@@ -64,7 +64,7 @@ std::vector<int> MaxMatchSearcher::search(std::vector<int> &tosearch,std::vector
                     
                     while(tosearch[j+1] == key && (j+1) < len)
                         ++j;
-                    continue;
+                   // continue;
                 }
                 else{
                     int tc = 1;
@@ -87,6 +87,8 @@ std::vector<int> MaxMatchSearcher::search(std::vector<int> &tosearch,std::vector
         if(count > max){
             max = count;
             maxrow = i+1;
+            if(count == tosearch.size())
+                break;
         }
     }
     std::vector<int> rowsfound;
