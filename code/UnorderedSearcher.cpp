@@ -1,9 +1,8 @@
 #include "UnorderedSearcher.h"
-
 #include<iostream>
 #include<vector>
 #include<unordered_map>
-
+#include<algorithm>
 
 
 UnorderedSearcher::UnorderedSearcher(){

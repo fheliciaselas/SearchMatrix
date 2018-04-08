@@ -1,6 +1,7 @@
 #include "MaxMatchSearcher.h"
 
 #include<iostream>
+#include<algorithm>
 
 MaxMatchSearcher::MaxMatchSearcher(){
     std::cout<<"Constructing MaxMatch Searcher Obj"<<std::endl;

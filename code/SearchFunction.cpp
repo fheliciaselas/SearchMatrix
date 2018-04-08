@@ -5,6 +5,7 @@
 #include<fstream>
 #include<iostream>
 #include<ctime>
+#include<chrono>
 
 double SearchFunction::benchmark_search(std::vector<int> &tosearch, Searcher *s) {
    
