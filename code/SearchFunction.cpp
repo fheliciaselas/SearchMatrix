@@ -27,18 +27,19 @@ double SearchFunction::benchmark_search(std::vector<int> &tosearch, Searcher *s)
         std::cout<<std::endl;
     }*/
     std::chrono::duration<double> diff = t2 - t1;
-    
+    //std::cout<<diff.count()*1000000<<std::endl;
     return diff.count();
 }
 
 std::vector<int> SearchFunction::search(std::vector<int> &tosearch, Searcher *s) {
     
-    clock_t start = clock() ;
+    std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
     std::vector<int> rowsfound = s->search(tosearch, matrix,elementCountMap);
-    clock_t end = clock() ;
+    std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> diff = t2 - t1;
     
-    float time = (float) (end - start) / CLOCKS_PER_SEC ;
-    std::cout<<"Searching Time: "<<time<<" seconds"<<std::endl;
+    //float time = (float) (end - start) / CLOCKS_PER_SEC ;
+    std::cout<<"Searching Time: "<<diff.count()*1000000<<" micro seconds"<<std::endl;
     
     
     if(rowsfound.size()==0)
