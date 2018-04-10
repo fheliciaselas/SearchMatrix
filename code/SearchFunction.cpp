@@ -4,7 +4,6 @@
 #include<sstream>
 #include<fstream>
 #include<iostream>
-#include<ctime>
 #include<chrono>
 
 double SearchFunction::benchmark_search(std::vector<int> &tosearch, Searcher *s) {
@@ -17,17 +16,8 @@ double SearchFunction::benchmark_search(std::vector<int> &tosearch, Searcher *s)
     
     std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
     
-   /* if(rowsfound.size()==0)
-        std::cout<<"Not found in matrix"<<std::endl;
-    else
-    {
-        std::cout<<"Found in row(s): ";
-        for(int i = 0;i<rowsfound.size();i++)
-            std::cout<<rowsfound[i]<<" ";
-        std::cout<<std::endl;
-    }*/
     std::chrono::duration<double> diff = t2 - t1;
-    //std::cout<<diff.count()*1000000<<std::endl;
+ 
     return diff.count();
 }
 
@@ -38,7 +28,6 @@ std::vector<int> SearchFunction::search(std::vector<int> &tosearch, Searcher *s)
     std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> diff = t2 - t1;
     
-    //float time = (float) (end - start) / CLOCKS_PER_SEC ;
     std::cout<<"Searching Time: "<<diff.count()*1000000<<" micro seconds"<<std::endl;
     
     
@@ -82,14 +71,12 @@ void  SearchFunction::openAndParseData(char *argv){
     std::ifstream input_file;
     std::string rawdata,parsed;
     input_file.open(argv); //opening the input file
-    int row_count=0;
     
     if(input_file.is_open()){
         
         while(getline(input_file,rawdata)){
             
-            std::unordered_map<int,unsigned int> temp;
-            std::vector <int> row;
+            std::vector <int > row;
             parsed = decrypt(rawdata); //decrypting each row in the data
             std::istringstream iss(parsed);
             
@@ -99,18 +86,31 @@ void  SearchFunction::openAndParseData(char *argv){
                 std::stringstream ss(s);
                 ss >> x; //write string to integer
                 row.push_back(x); // push to std::vector 'row'
-                if(temp.count(x)==0)  //check if element not present
-                    temp[x] =1; // then set count to 1
-                else
-                    temp[x] = temp[x]+1; // increment count of element
                 
             }
             
-            elementCountMap[row_count] = temp; // map of count of elements added to key = row number
-            matrix.push_back(row); // add the 'row' std::vector to the matrix
-            ++row_count;
+           matrix.push_back(row); // add the 'row' std::vector to the matrix
         }
-        
+        int s = matrix.size();
+        for(int i=0;i<s;i++)
+        {
+            int l =matrix[i].size();
+            
+            for(int j=0;j<l;j++){
+                std::vector< std::pair<int,int > > &temp = elementCountMap[matrix[i][j]];
+                bool found = false;
+                for(int k=0;k<temp.size();k++){
+                    if(temp[k].first == i){
+                        found = true;
+                        temp[k].second +=1;
+                    }
+                    
+                }
+                if(!found){
+                    temp.push_back(std::make_pair(i,1));
+                }
+            }
+        }
     }
     else
         std::cout<<"Unable to openfile"<<std::endl;

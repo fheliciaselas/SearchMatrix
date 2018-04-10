@@ -15,44 +15,33 @@ UnorderedSearcher::~UnorderedSearcher(){
     std::cout<<"Destructing Unordered Searcher Obj"<<std::endl;
     
 }
-std::vector<int> UnorderedSearcher::search(std::vector<int> &tosearch,std::vector< std::vector<int > > &matrix, std::unordered_map< unsigned int, std::unordered_map <int,unsigned int > >  &elementCountMap){
+std::vector<int> UnorderedSearcher::search(std::vector<int> &tosearch,std::vector< std::vector<int > > &matrix,std::unordered_map< unsigned int, std::vector < std::pair<int,int > > > &elementCountMap){
     
-   std::vector<int> rowsfound;
-   /* std::unordered_map<int,int> count_search;
-    for (int j=0,len = tosearch.size();j<len;j++){
-        ++count_search[tosearch[j]];
-    }*/
-    std::sort(tosearch.begin(),tosearch.end());
-
-    for(int i=0,s = elementCountMap.size();i<s;++i){ //for each row
-        bool found = true;
-        std::unordered_map<int, unsigned int > &temp = elementCountMap[i];
-        for(int j=0, len = tosearch.size();j<len;++j){ //for the length of the substring
-            
-            const unsigned int &key = tosearch[j];
-            if(temp.count(key) == 0){
-                found = false;
-                break;
-            }
-            else
-            {
-                int tc = 1;
-                while(tosearch[j+1] == key && (j+1) < len)
-                {
-                    ++j;
-                    ++tc;
-                }
-                
-                if(tc > temp[key])
-                {
-                    found = false;
-                    break;
-                }
-            }
+    std::vector<int> count (matrix.size()); //create a count array of size = rows
+    std::sort(tosearch.begin(),tosearch.end()); //sort input search array (m log m)
+    for(int i=0,len = tosearch.size();i<len;++i){ //for every element in the search array
+        int ct =1;
+        
+        int &k = tosearch[i];
+        while (k==tosearch[i+1] && i+1<len) { //count repetitions in search array
+            ++i;
+            ++ct;
         }
-        if(found)
-            rowsfound.push_back(i+1);
+        std::vector<std::pair<int, int > > &temp = elementCountMap[k]; // get the rownum,count pair of the key k
+        
+        for(int j=0,s=temp.size();j<s;j++){ // for all pairs corresponding to the key
+            
+            int rownum = temp[j].first;
+            if(temp[j].second >= ct) //if the row has atleast count >= number of repetitions
+                count[rownum] += ct; // increment count array
+        }
+    
     }
+    std::vector<int> rowsfound;
+    for(int j=0;j<count.size();j++)
+        if(count[j]==tosearch.size())  //if count array of row has value = length of input array
+            rowsfound.push_back(j+1); // add row to result
+   
     return rowsfound;
    
 }
