@@ -26,7 +26,9 @@ std::vector<int> SequenceSearcher::search(std::vector<int> &tosearch,std::vector
             ++ct;  //count repetitions in search array
         }
         std::vector<std::pair<int, int > > &temp = elementCountMap[k]; // get the rownum,count pair of the key k
-        
+        if(temp.size() == 0)
+            break;
+       
         for(int j=0,s=temp.size();j<s;j++){ // for all pairs corresponding to the key
             int rownum = temp[j].first;
             if(temp[j].second >= ct) //if the row has atleast count >= number of repetitions

@@ -4,8 +4,6 @@
 
 Searcher::Searcher(){
     
-   
-    //std::cout<<"Initializing Matrix Information"<<std::endl;
 }
 
 Searcher::~Searcher(){

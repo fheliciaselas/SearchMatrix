@@ -9,7 +9,7 @@
 class SearchFunction{
     
 private:
-     std::vector< std::vector<int > > matrix;
+    std::vector< std::vector<int > > matrix;
     std::unordered_map< unsigned int, std::vector < std::pair<int,int > > >  elementCountMap;
     std::string decrypt(std::string raw_text);
     

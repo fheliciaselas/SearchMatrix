@@ -47,7 +47,7 @@ void parseCommandInput(std::string &cmd,std::vector<int> &tosearch,std::string &
             std::stringstream tmp(s);
             int x = 0;
             tmp >> x;
-            //std::cout<<"s: "<<s<<std::endl;
+          
             if(std::to_string(x) != s)
             {
                 std::cerr<<std::endl<<"ERROR: Invalid input"<<std::endl;
